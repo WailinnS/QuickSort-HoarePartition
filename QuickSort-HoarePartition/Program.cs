@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
+using System.Threading;
 
 namespace QuickSort_HoarePartition
 {
@@ -11,25 +13,30 @@ namespace QuickSort_HoarePartition
             right = temp;
         }
 
-        static void QuickSort(ref int[] data)
+
+
+        static void QuickSort(ref int[] data, int leftSide, int rightSide)
         {
+            while (leftSide < rightSide)
+            {
+                int pivot = HoarePartition(ref data, leftSide, rightSide);
+                //left side
+                QuickSort(ref data, leftSide, pivot);
+                //rightSide
+                QuickSort(ref data, pivot + 1, rightSide);
+            }
 
-            //get pivot
-            int pivot = data[0];
-
-            //once left and right pass each other or meet, split the array with the right being in left sub array
-            QuickSort(ref data, 0, data.Length - 1);
-       
         }
-        static void QuickSort(ref int[] data ,int start, int end)
+        //thio should return a pivot, needs to be improved...
+        static int HoarePartition(ref int[] data, int start, int end)
         {
             int pivot = data[start];
-            int left = start;
-            int right = end;
-            while (right > left)
+            int left = start + 1;
+            int right = end - 1;
+            while (true)
             {
                 //move left until you find a value larger than the pivot
-                while (data[left] < pivot)
+                while (data[left] <= pivot)
                 {
                     left++;
                 }
@@ -38,24 +45,26 @@ namespace QuickSort_HoarePartition
                 {
                     right--;
                 }
+                
+                if (left >= right)
+                {
+                    return right;
+                }
 
                 Swap(ref data[left], ref data[right]);
-                left++;
-                right--;
             }
-           
+          
 
         }
 
         static void Main(string[] args)
         {
             //quickSort Hoare Partition
-            int[] exampleArray = new int[] { 5, 4, 3, 6, 2, 1, 7 };
+            int[] exampleArray = new int[] { 50, 44, 33, 62, 20, 11, 72 };
+
+            QuickSort(ref exampleArray, 0, exampleArray.Length - 1);
 
 
-
-
-            ;
         }
     }
 }
