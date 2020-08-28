@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Tracing;
-using System.Threading;
 
 namespace QuickSort_HoarePartition
 {
@@ -17,7 +15,7 @@ namespace QuickSort_HoarePartition
 
         static void QuickSort(ref int[] data, int leftSide, int rightSide)
         {
-            while (leftSide < rightSide)
+            if (leftSide < rightSide)
             {
                 int pivot = HoarePartition(ref data, leftSide, rightSide);
                 //left side
@@ -31,21 +29,21 @@ namespace QuickSort_HoarePartition
         static int HoarePartition(ref int[] data, int start, int end)
         {
             int pivot = data[start];
-            int left = start + 1;
-            int right = end - 1;
+            int left = start - 1;
+            int right = end + 1;
             while (true)
             {
                 //move left until you find a value larger than the pivot
-                while (data[left] <= pivot)
+                do
                 {
                     left++;
-                }
+                } while (data[left] < pivot);
                 //once its found, check right side
-                while (data[right] > pivot)
+                do
                 {
                     right--;
-                }
-                
+                } while (data[right] > pivot);
+
                 if (left >= right)
                 {
                     return right;
@@ -53,18 +51,23 @@ namespace QuickSort_HoarePartition
 
                 Swap(ref data[left], ref data[right]);
             }
-          
+
 
         }
 
         static void Main(string[] args)
         {
             //quickSort Hoare Partition
-            int[] exampleArray = new int[] { 50, 44, 33, 62, 20, 11, 72 };
-
+            Random numGen = new Random();
+            int[] exampleArray = new int[numGen.Next(4, 101)];
+            for (int i = 0; i < exampleArray.Length; i++)
+            {
+                exampleArray[i] = numGen.Next(100);
+            }
+            ;
             QuickSort(ref exampleArray, 0, exampleArray.Length - 1);
 
-
+            ;
         }
     }
 }
